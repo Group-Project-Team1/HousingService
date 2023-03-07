@@ -14,6 +14,7 @@ import com.beaconfire.housingservice.service.HouseService;
 import com.beaconfire.housingservice.service.LandlordService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -35,6 +36,7 @@ public class HouseController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAuthority('hr')")
     public HouseResponse findHouseById(@PathVariable Integer id) throws HouseNotFoundException {
         House house = houseService.findHouseById(id);
         if(house==null){
@@ -46,6 +48,7 @@ public class HouseController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('hr')")
     public MessageResponse addHouse(@RequestBody House house){
         Landlord landlord;
         if(house.getLandlord().getId()!=null){
@@ -75,6 +78,7 @@ public class HouseController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('hr')")
     public MessageResponse deleteHouse(@PathVariable Integer id) throws HouseNotFoundException {
         House house = houseService.findHouseById(id);
         if(house==null){
@@ -87,6 +91,7 @@ public class HouseController {
     }
 
     @GetMapping("{id}/facility-report/page/{page}")
+    @PreAuthorize("hasAuthority('hr')")
     public FacilityReportsPageResponse findFacilityReportsByPage(@PathVariable Integer id, @PathVariable Integer page) throws HouseNotFoundException, PageExceedMaxCountException {
         List<FacilityReport> facilityReports = houseService.findFacilityReportByPage(id, page);
 

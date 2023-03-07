@@ -14,6 +14,7 @@ import com.beaconfire.housingservice.service.FacilityReportService;
 import com.beaconfire.housingservice.service.FacilityService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -31,6 +32,7 @@ public class FacilityReportController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('employee')")
     public MessageResponse addFacilityReport(@RequestBody FacilityReportRequest facilityReportRequest) throws FacilityNotFoundException {
         Facility facility = facilityService.findFacilityById(facilityReportRequest.getFacilityId());
 
@@ -51,6 +53,7 @@ public class FacilityReportController {
     }
 
     @PutMapping("{id}/inProgress")
+    @PreAuthorize("hasAuthority('hr')")
     public MessageResponse markAsInProgress(@PathVariable Integer id) throws FacilityReportNotFoundException, FacilityReportNotOpenException {
 
         FacilityReport facilityReport = facilityReportService.findFacilityReportById(id);
@@ -68,6 +71,7 @@ public class FacilityReportController {
     }
 
     @PutMapping("{id}/close")
+    @PreAuthorize("hasAuthority('hr')")
     public MessageResponse markAsClosed(@PathVariable Integer id) throws FacilityReportNotFoundException, FacilityReportAlreadyClosedException {
 
         FacilityReport facilityReport = facilityReportService.findFacilityReportById(id);
