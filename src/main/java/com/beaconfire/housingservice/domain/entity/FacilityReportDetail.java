@@ -19,7 +19,7 @@ public class FacilityReportDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="facility_report_id")
@@ -28,7 +28,7 @@ public class FacilityReportDetail {
     private FacilityReport facilityReport;
 
     @Column(name = "employee_id", nullable = false)
-    private int EmployeeId;
+    private Integer EmployeeId;
 
     @Column(name = "created_date")
     private Timestamp createDate;

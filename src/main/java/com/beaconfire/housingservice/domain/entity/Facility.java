@@ -19,7 +19,7 @@ public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="house_id")
@@ -37,8 +37,7 @@ public class Facility {
     private String quantity;
 
     @OneToMany(mappedBy = "facility", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JsonIgnore
+            fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<FacilityReport> facilityReports;
 }

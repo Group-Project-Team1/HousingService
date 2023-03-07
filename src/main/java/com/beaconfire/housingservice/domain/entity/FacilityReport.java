@@ -19,7 +19,7 @@ public class FacilityReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="facility_id")
@@ -28,7 +28,7 @@ public class FacilityReport {
     private Facility facility;
 
     @Column(name = "employee_id", nullable = false)
-    private int EmployeeId;
+    private Integer EmployeeId;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -43,8 +43,7 @@ public class FacilityReport {
     private Timestamp createDate;
 
     @OneToMany(mappedBy = "facilityReport", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JsonIgnore
+            fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<FacilityReportDetail> facilityReportDetails;
 

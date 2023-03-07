@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = HibernateJpaAutoConfiguration.class)
 @EnableTransactionManagement
-@EnableCaching
 public class HousingServiceApplication {
 
     public static void main(String[] args) {

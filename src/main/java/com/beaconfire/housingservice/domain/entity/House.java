@@ -18,23 +18,21 @@ public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name="landlord_id")
     @ToString.Exclude
-    @JsonIgnore
     private Landlord landlord;
 
     @Column(name = "max_occupant", unique = true, nullable = false)
-    private int maxOccupant;
+    private Integer maxOccupant;
 
     @Column(name = "address", length = 45)
     private String address;
 
     @OneToMany(mappedBy = "house", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JsonIgnore
+            fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Facility> facilities;
 }

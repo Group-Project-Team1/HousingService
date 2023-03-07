@@ -18,7 +18,7 @@ public class Landlord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name", length = 45)
     private String firstName;
@@ -33,7 +33,7 @@ public class Landlord {
     private String cellphone;
 
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     @JsonIgnore
     @ToString.Exclude
     private Set<House> houses;
