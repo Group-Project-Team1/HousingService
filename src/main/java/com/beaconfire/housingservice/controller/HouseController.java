@@ -1,11 +1,14 @@
 package com.beaconfire.housingservice.controller;
 
 import com.beaconfire.housingservice.domain.entity.Facility;
+import com.beaconfire.housingservice.domain.entity.FacilityReport;
 import com.beaconfire.housingservice.domain.entity.House;
 import com.beaconfire.housingservice.domain.entity.Landlord;
+import com.beaconfire.housingservice.domain.response.FacilityReportsPageResponse;
 import com.beaconfire.housingservice.domain.response.HouseResponse;
 import com.beaconfire.housingservice.domain.response.MessageResponse;
 import com.beaconfire.housingservice.exception.HouseNotFoundException;
+import com.beaconfire.housingservice.exception.PageExceedMaxCountException;
 import com.beaconfire.housingservice.service.FacilityService;
 import com.beaconfire.housingservice.service.HouseService;
 import com.beaconfire.housingservice.service.LandlordService;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 
 @RestController
 @Api(value = "HouseController RESTful endpoints")
@@ -30,7 +34,7 @@ public class HouseController {
         this.facilityService = facilityService;
     }
 
-    @GetMapping("find/{id}")
+    @GetMapping("{id}")
     public HouseResponse findHouseById(@PathVariable Integer id) throws HouseNotFoundException {
         House house = houseService.findHouseById(id);
         if(house==null){
@@ -41,7 +45,7 @@ public class HouseController {
                 .build();
     }
 
-    @PostMapping("add")
+    @PostMapping
     public MessageResponse addHouse(@RequestBody House house){
         Landlord landlord;
         if(house.getLandlord().getId()!=null){
@@ -70,7 +74,7 @@ public class HouseController {
                 .build();
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("{id}")
     public MessageResponse deleteHouse(@PathVariable Integer id) throws HouseNotFoundException {
         House house = houseService.findHouseById(id);
         if(house==null){
@@ -79,6 +83,16 @@ public class HouseController {
         houseService.deleteHouse(id);
         return MessageResponse.builder()
                 .message("House deleted successfully.")
+                .build();
+    }
+
+    @GetMapping("{id}/facility-report/page/{page}")
+    public FacilityReportsPageResponse findFacilityReportsByPage(@PathVariable Integer id, @PathVariable Integer page) throws HouseNotFoundException, PageExceedMaxCountException {
+        List<FacilityReport> facilityReports = houseService.findFacilityReportByPage(id, page);
+
+        return FacilityReportsPageResponse.builder()
+                .page(page)
+                .facilityReports(facilityReports)
                 .build();
     }
 }

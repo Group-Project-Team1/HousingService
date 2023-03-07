@@ -28,7 +28,7 @@ public class FacilityReport {
     private Facility facility;
 
     @Column(name = "employee_id", nullable = false)
-    private Integer EmployeeId;
+    private Integer employeeId;
 
     @Column(name = "description", length = 45)
     private String description;
@@ -47,4 +47,13 @@ public class FacilityReport {
     @ToString.Exclude
     private Set<FacilityReportDetail> facilityReportDetails;
 
+
+    public FacilityReport(Facility facility, Integer employeeId, String title, String description, String status, Timestamp createDate) {
+        this.facility = facility;
+        this.employeeId = employeeId;
+        this.description = description;
+        this.title = title;
+        this.status = status;
+        this.createDate = createDate;
+    }
 }

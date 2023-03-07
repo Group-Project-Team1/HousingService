@@ -28,7 +28,7 @@ public class FacilityReportDetail {
     private FacilityReport facilityReport;
 
     @Column(name = "employee_id", nullable = false)
-    private Integer EmployeeId;
+    private Integer employeeId;
 
     @Column(name = "created_date")
     private Timestamp createDate;
@@ -38,4 +38,12 @@ public class FacilityReportDetail {
 
     @Column(name = "comment", length = 45)
     private String comment;
+
+    public FacilityReportDetail(FacilityReport facilityReport, Integer employeeId, Timestamp createDate, Timestamp lastModificationDate, String comment) {
+        this.facilityReport = facilityReport;
+        this.employeeId = employeeId;
+        this.createDate = createDate;
+        this.lastModificationDate = lastModificationDate;
+        this.comment = comment;
+    }
 }

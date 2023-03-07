@@ -2,7 +2,7 @@ package com.beaconfire.housingservice.config;
 
 
 import com.beaconfire.housingservice.domain.response.ErrorResponse;
-import com.beaconfire.housingservice.exception.HouseNotFoundException;
+import com.beaconfire.housingservice.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +20,11 @@ public class MyExceptionHandler {
         );
     }
 
-    @ExceptionHandler(value = {HouseNotFoundException.class})
+    @ExceptionHandler(value = {HouseNotFoundException.class,
+            FacilityReportDetailNotFoundException.class,
+            PageExceedMaxCountException.class,
+            FacilityReportNotFoundException.class,
+            FacilityNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleDuplicateException(Exception e){
         return new ResponseEntity<>(
                 ErrorResponse.builder()
