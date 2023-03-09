@@ -6,6 +6,7 @@ import com.beaconfire.housingservice.domain.entity.House;
 import com.beaconfire.housingservice.domain.entity.Landlord;
 import com.beaconfire.housingservice.domain.response.*;
 import com.beaconfire.housingservice.exception.HouseNotFoundException;
+import com.beaconfire.housingservice.exception.LandlordNotFoundException;
 import com.beaconfire.housingservice.exception.PageExceedMaxCountException;
 import com.beaconfire.housingservice.service.FacilityService;
 import com.beaconfire.housingservice.service.HouseService;
@@ -59,10 +60,13 @@ public class HouseController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('hr')")
-    public MessageResponse addHouse(@RequestBody House house){
+    public MessageResponse addHouse(@RequestBody House house) throws LandlordNotFoundException{
         Landlord landlord;
         if(house.getLandlord().getId()!=null){
             landlord = landlordService.findLandlordById(house.getLandlord().getId());
+            if(landlord==null){
+                throw new LandlordNotFoundException();
+            }
             landlord.getHouses().add(house);
             house.setLandlord(landlord);
         }
