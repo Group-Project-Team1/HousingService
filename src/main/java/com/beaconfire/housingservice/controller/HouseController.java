@@ -4,9 +4,7 @@ import com.beaconfire.housingservice.domain.entity.Facility;
 import com.beaconfire.housingservice.domain.entity.FacilityReport;
 import com.beaconfire.housingservice.domain.entity.House;
 import com.beaconfire.housingservice.domain.entity.Landlord;
-import com.beaconfire.housingservice.domain.response.FacilityReportsPageResponse;
-import com.beaconfire.housingservice.domain.response.HouseResponse;
-import com.beaconfire.housingservice.domain.response.MessageResponse;
+import com.beaconfire.housingservice.domain.response.*;
 import com.beaconfire.housingservice.exception.HouseNotFoundException;
 import com.beaconfire.housingservice.exception.PageExceedMaxCountException;
 import com.beaconfire.housingservice.service.FacilityService;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(value = "HouseController RESTful endpoints")
@@ -32,6 +31,16 @@ public class HouseController {
         this.houseService = houseService;
         this.landlordService = landlordService;
         this.facilityService = facilityService;
+    }
+
+    @GetMapping("all")
+    public AllHouseResponse findAllHouses(){
+        List<House> houses = houseService.findAllHouses();
+
+        List<HouseAssignInfo> houseAssignInfo = houses.stream().map(h -> new HouseAssignInfo(h.getId(),h.getMaxOccupant())).collect(Collectors.toList());
+        return AllHouseResponse.builder()
+                .houseAssignInfo(houseAssignInfo)
+                .build();
     }
 
     @GetMapping("{id}")

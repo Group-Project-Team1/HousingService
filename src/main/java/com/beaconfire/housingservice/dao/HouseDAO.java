@@ -10,6 +10,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -63,5 +65,22 @@ public class HouseDAO {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<House> findAllHouses(){
+        Session session;
+        List<House> houses = null;
+        try{
+            session = sessionFactory.getCurrentSession();
+            CriteriaBuilder cb = sessionFactory.getCriteriaBuilder();
+            CriteriaQuery<House> cq = cb.createQuery(House.class);
+            Root<House> root = cq.from(House.class);
+            cq.select(root);
+            houses = session.createQuery(cq).getResultList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return houses;
+
     }
 }

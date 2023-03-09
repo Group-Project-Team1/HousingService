@@ -38,6 +38,9 @@ public class HouseService {
     }
 
     @Transactional
+    public List<House> findAllHouses(){ return houseDAO.findAllHouses(); }
+
+    @Transactional
     public List<FacilityReport> findFacilityReportByPage(Integer id, Integer page) throws HouseNotFoundException, PageExceedMaxCountException {
         House house = houseDAO.findHouseById(id);
         if(house==null){

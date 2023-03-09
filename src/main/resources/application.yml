@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: housing-service
+  mvc:
+    servlet:
+      path: /housing-service # this will be the url pattern
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  port: 8812
+
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
