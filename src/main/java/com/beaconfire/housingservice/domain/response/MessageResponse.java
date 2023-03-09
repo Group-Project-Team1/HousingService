@@ -1,12 +1,13 @@
 package com.beaconfire.housingservice.domain.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class MessageResponse {
     String message;
 }
