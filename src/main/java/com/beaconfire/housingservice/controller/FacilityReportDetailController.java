@@ -10,6 +10,7 @@ import com.beaconfire.housingservice.service.FacilityReportDetailService;
 import com.beaconfire.housingservice.service.FacilityReportService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -29,6 +30,7 @@ public class FacilityReportDetailController {
 
 
     @PostMapping
+    @PreAuthorize("hasAuthority('employee')")
     public MessageResponse addFacilityReportDetail(@RequestBody FacilityReportDetailRequest facilityReportDetailRequest){
         FacilityReport facilityReport = facilityReportService.findFacilityReportById(facilityReportDetailRequest.getFacilityReportId());
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
@@ -45,6 +47,7 @@ public class FacilityReportDetailController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('employee')")
     public MessageResponse updateFacilityReportDetail(@RequestBody FacilityReportDetail facilityReportDetail) throws FacilityReportDetailNotFoundException {
         //TODO: userId match, determine if current user has right(or is hr) to edit the FacilityReportDetail
 
