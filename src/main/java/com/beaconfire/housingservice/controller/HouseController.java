@@ -35,6 +35,7 @@ public class HouseController {
     }
 
     @GetMapping("all")
+    @PreAuthorize("hasAuthority('hr')")
     public AllHouseResponse findAllHouses(){
         List<House> houses = houseService.findAllHouses();
 

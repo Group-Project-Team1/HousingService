@@ -23,10 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .csrf().disable()
             .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-            .antMatchers("/house/*").hasAuthority("hr")
-            .antMatchers("/facility-report").hasAuthority("employee")
-            .antMatchers("/facility-report/*").hasAuthority("hr")
-            .antMatchers("/facility-report-detail").hasAuthority("employee")
+            .antMatchers("/housing-service/house/*").hasAuthority("hr")
+            .antMatchers("/housing-service/facility-report").hasAuthority("employee")
+            .antMatchers("/housing-service/facility-report/*").hasAuthority("hr")
+            .antMatchers("/housing-service/facility-report-detail").hasAuthority("employee")
             .anyRequest()
             .authenticated();
     }
