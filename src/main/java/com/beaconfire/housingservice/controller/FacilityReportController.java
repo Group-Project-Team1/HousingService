@@ -32,8 +32,8 @@ public class FacilityReportController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('employee')")
-    public MessageResponse addFacilityReport(@RequestBody FacilityReportRequest facilityReportRequest) throws FacilityNotFoundException {
+    @PreAuthorize("hasAuthority('hr')")
+    public FacilityReport addFacilityReport(@RequestBody FacilityReportRequest facilityReportRequest) throws FacilityNotFoundException {
         Facility facility = facilityService.findFacilityById(facilityReportRequest.getFacilityId());
 
         if(facility==null){
@@ -46,10 +46,8 @@ public class FacilityReportController {
                 facilityReportRequest.getDescription(),
                 "Open",
                 new Timestamp(System.currentTimeMillis()));
-        facilityReportService.addFacilityReport(facilityReport);
-        return MessageResponse.builder()
-                .message("FacilityReport created successfully.")
-                .build();
+        int facilityReportId = facilityReportService.addFacilityReport(facilityReport);
+        return facilityReportService.findFacilityReportById(facilityReportId);
     }
 
     @PutMapping("{id}/inProgress")

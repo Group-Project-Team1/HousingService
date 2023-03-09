@@ -6,11 +6,14 @@ import com.beaconfire.housingservice.domain.request.FacilityReportDetailRequest;
 import com.beaconfire.housingservice.domain.request.FacilityReportRequest;
 import com.beaconfire.housingservice.domain.response.MessageResponse;
 import com.beaconfire.housingservice.exception.FacilityReportDetailNotFoundException;
+import com.beaconfire.housingservice.exception.FacilityReportPermissionException;
+import com.beaconfire.housingservice.security.AuthUserDetail;
 import com.beaconfire.housingservice.service.FacilityReportDetailService;
 import com.beaconfire.housingservice.service.FacilityReportService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -31,30 +34,37 @@ public class FacilityReportDetailController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('employee')")
-    public MessageResponse addFacilityReportDetail(@RequestBody FacilityReportDetailRequest facilityReportDetailRequest){
+    public FacilityReportDetail addFacilityReportDetail(@RequestBody FacilityReportDetailRequest facilityReportDetailRequest) throws FacilityReportPermissionException{
         FacilityReport facilityReport = facilityReportService.findFacilityReportById(facilityReportDetailRequest.getFacilityReportId());
+        AuthUserDetail authUserDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(facilityReport.getEmployeeId() != authUserDetail.getUserId()){
+            throw new FacilityReportPermissionException();
+        }
+
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         FacilityReportDetail facilityReportDetail = new FacilityReportDetail(facilityReport,
-                facilityReportDetailRequest.getEmployeeId(),
+                authUserDetail.getUserId(),
                 currentTime,
                 currentTime,
                 facilityReportDetailRequest.getComment());
 
-        facilityReportDetailService.addFacilityReportDetail(facilityReportDetail);
-        return MessageResponse.builder()
-                .message("FacilityReportDetail created successfully.")
-                .build();
+        int facilityReportDetailId = facilityReportDetailService.addFacilityReportDetail(facilityReportDetail);
+        return facilityReportDetailService.findFacilityReportDetailById(facilityReportDetailId);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('employee')")
-    public MessageResponse updateFacilityReportDetail(@RequestBody FacilityReportDetail facilityReportDetail) throws FacilityReportDetailNotFoundException {
-        //TODO: userId match, determine if current user has right(or is hr) to edit the FacilityReportDetail
-
+    public MessageResponse updateFacilityReportDetail(@RequestBody FacilityReportDetail facilityReportDetail) throws FacilityReportDetailNotFoundException,FacilityReportPermissionException {
         FacilityReportDetail oldFacilityReportDetail = facilityReportDetailService.findFacilityReportDetailById(facilityReportDetail.getId());
+        AuthUserDetail authUserDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if(oldFacilityReportDetail==null){
             throw new FacilityReportDetailNotFoundException();
+        }
+
+        if(oldFacilityReportDetail.getEmployeeId() != authUserDetail.getUserId()){
+            throw new FacilityReportPermissionException();
         }
 
         oldFacilityReportDetail.setLastModificationDate(new Timestamp(System.currentTimeMillis()));

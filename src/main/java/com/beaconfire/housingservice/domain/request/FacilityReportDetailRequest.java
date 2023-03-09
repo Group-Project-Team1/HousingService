@@ -9,6 +9,5 @@ import lombok.*;
 @ToString
 public class FacilityReportDetailRequest {
     private Integer facilityReportId;
-    private Integer employeeId;
     private String comment;
 }
