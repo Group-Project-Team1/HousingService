@@ -36,11 +36,16 @@ public class EmployeeHouseController {
 
     @GetMapping("all")
     public AllHouseResponse findAllHousesEmployee(){
+        System.out.println("11111");
         List<House> houses = houseService.findAllHouses();
+        System.out.println("22222");
 
         List<HouseAssignInfo> houseAssignInfo = houses.stream().map(h -> new HouseAssignInfo(h.getId(),h.getMaxOccupant())).collect(Collectors.toList());
-        return AllHouseResponse.builder()
-                .houseAssignInfo(houseAssignInfo)
-                .build();
+        System.out.println("333");
+        houseAssignInfo.stream().forEach(System.out::println);
+//        return AllHouseResponse.builder()
+//                .houseAssignInfo(houseAssignInfo)
+//                .build();
+        return new AllHouseResponse(houseAssignInfo);
     }
 }
