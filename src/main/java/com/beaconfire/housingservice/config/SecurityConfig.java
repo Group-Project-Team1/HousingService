@@ -4,6 +4,7 @@ import com.beaconfire.housingservice.security.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,6 +31,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/housing-service/house/employee/all").permitAll()
             .anyRequest()
             .authenticated();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/housing-service/v2/api-docs/");
+        web.ignoring().antMatchers("/housing-service/swagger.json");
+        web.ignoring().antMatchers("/housing-service/swagger-ui.html");
+        web.ignoring().antMatchers("/housing-service/swagger-resources/");
+        web.ignoring().antMatchers("/housing-service/webjars/");
     }
 }
 
