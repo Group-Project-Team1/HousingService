@@ -27,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .antMatchers("/housing-service/facility-report").hasAuthority("hr")
             .antMatchers("/housing-service/facility-report/*").hasAuthority("hr")
             .antMatchers("/housing-service/facility-report-detail").hasAuthority("employee")
+                .antMatchers("/housing-service/house/employee/all").permitAll()
             .anyRequest()
             .authenticated();
     }
