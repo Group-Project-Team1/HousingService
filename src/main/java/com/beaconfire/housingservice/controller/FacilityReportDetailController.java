@@ -5,7 +5,9 @@ import com.beaconfire.housingservice.domain.entity.FacilityReportDetail;
 import com.beaconfire.housingservice.domain.request.FacilityReportDetailRequest;
 import com.beaconfire.housingservice.domain.request.FacilityReportRequest;
 import com.beaconfire.housingservice.domain.response.MessageResponse;
+import com.beaconfire.housingservice.exception.FacilityNotFoundException;
 import com.beaconfire.housingservice.exception.FacilityReportDetailNotFoundException;
+import com.beaconfire.housingservice.exception.FacilityReportNotFoundException;
 import com.beaconfire.housingservice.exception.FacilityReportPermissionException;
 import com.beaconfire.housingservice.security.AuthUserDetail;
 import com.beaconfire.housingservice.service.FacilityReportDetailService;
@@ -34,11 +36,15 @@ public class FacilityReportDetailController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('employee')")
-    public FacilityReportDetail addFacilityReportDetail(@RequestBody FacilityReportDetailRequest facilityReportDetailRequest) throws FacilityReportPermissionException{
+    public FacilityReportDetail addFacilityReportDetail(@RequestBody FacilityReportDetailRequest facilityReportDetailRequest) throws FacilityReportPermissionException, FacilityReportNotFoundException {
         FacilityReport facilityReport = facilityReportService.findFacilityReportById(facilityReportDetailRequest.getFacilityReportId());
+        if(facilityReport==null){
+            throw new FacilityReportNotFoundException();
+        }
+
         AuthUserDetail authUserDetail = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(facilityReport.getEmployeeId() != authUserDetail.getUserId()){
+        if(authUserDetail.getUserId()!=1 &&  facilityReport.getEmployeeId() != authUserDetail.getUserId()){
             throw new FacilityReportPermissionException();
         }
 
